@@ -52,7 +52,7 @@
       function createPicker() {
         if (pickerApiLoaded && oauthToken) {
           var picker = new google.picker.PickerBuilder().
-              addView(google.picker.ViewId.PHOTOS).
+              addView(google.picker.ViewId.FILES).
               setOAuthToken(oauthToken).
               setDeveloperKey(developerKey).
               setCallback(pickerCallback).
