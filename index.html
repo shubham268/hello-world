@@ -69,8 +69,28 @@
     // A simple callback implementation.
     function pickerCallback(data) {
       if (data.action == google.picker.Action.PICKED) {
+        console.log("docs", data.docs);
         var fileId = data.docs[0].id;
-        alert('The user selected: ' + fileId);
+        var fileName = data.docs[0].name;
+        fetch("https://www.googleapis.com/drive/v3/files/"+fileId + "?alt=media&key=AIzaSyC7xIeBwkqkfCcZ26mfntkJHB4mpl2TbtQ", {
+                        'headers':{
+                            'Authorization':'Bearer '+oauthToken
+                        }
+                    }).then(res=>{
+                        console.log(res);
+                        return res.blob();
+                    }).then((blob) => {
+                        let file;
+                        console.log("blob", blob);
+                        if (!navigator.msSaveBlob) { // detect if not Edge
+                            file = new File([blob as BlobPart], fileName, { type: 'application/pdf' });
+                          console.log("edge ", file, fileName);
+                        } else {
+                            file = this.blobToFile(blob, fileName);
+                          console.log("other", file, fileName);
+                        }
+                        return file
+                    })
       }
     }
     </script>
